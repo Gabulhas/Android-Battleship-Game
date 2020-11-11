@@ -6,19 +6,19 @@
     android:layout_height="match_parent"
     tools:context=".BoardGame">
 
-    <androidx.gridlayout.widget.GridLayout
+    <GridLayout
         android:id="@+id/play_board"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:columnCount="10"
+        android:columnCount="10"
+        android:rowCount="10"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:rowCount="10">
+        app:layout_constraintStart_toStartOf="parent">
 
-    </androidx.gridlayout.widget.GridLayout>
+    </GridLayout>
 
-    <androidx.gridlayout.widget.GridLayout
+    <GridLayout
         android:id="@+id/my_board"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -26,16 +26,16 @@
         android:layout_marginTop="64dp"
         android:layout_marginEnd="64dp"
         android:layout_marginBottom="64dp"
-        app:columnCount="10"
+        android:columnCount="10"
+        android:rowCount="10"
         app:layout_constraintBottom_toTopOf="@+id/play_board"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
 
-        app:rowCount="10">
+        app:layout_constraintTop_toTopOf="parent">
 
-    </androidx.gridlayout.widget.GridLayout>
+    </GridLayout>
 
     <TextView
         android:id="@+id/textView2"

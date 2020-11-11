@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="water"> #FF4DD0E1</color>
+    <color name="shot"> #FFCFD8DC</color>
+    <color name="destroyed"> #FFb71c1c </color>
+    <color name="submarine"> #FF4DD0E1</color>
+</resources>

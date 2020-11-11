@@ -1,41 +1,44 @@
 package guilherme.battlleship;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.gridlayout.widget.GridLayout;
 
-import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.Shape;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
-import android.view.Window;
-import android.widget.Button;
+import android.widget.GridLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+
+import guilherme.battlleship.GameLogic.GameBoard;
+import guilherme.battlleship.GameLogic.Spot;
 
 public class BoardGame extends AppCompatActivity {
 
     boolean doubleBackToExitPressedOnce = false;
-
+    GameBoard playerBoard;
+    GameBoard enemyBoard;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle("Player");
         setContentView(R.layout.activity_board_game);
-        Intent intent = getIntent();
 
         GridLayout play_board = findViewById(R.id.play_board);
         GridLayout my_board = findViewById(R.id.my_board);
-        setTitle("Player");
 
-        fillBoard(play_board, true);
-        fillBoard(my_board, false);
+
+        playerBoard = new GameBoard("Player");
+        enemyBoard = new GameBoard("Enemy");
+        Spot forTesting = new Spot(2, 3, 0, Color.parseColor("#651FFF"), Color.parseColor("#d50000"));
+
+        enemyBoard.getMyBoard().get(2).set(3, forTesting);
+        renderBoard(play_board, true, enemyBoard.getMyBoard());
+        renderBoard(my_board, false, playerBoard.getMyBoard());
 
     }
 
@@ -58,16 +61,12 @@ public class BoardGame extends AppCompatActivity {
         }, 2000);
     }
 
-    public void fillBoard(GridLayout board, Boolean active) {
-        GradientDrawable shape = new GradientDrawable();
+    public void renderBoard(GridLayout board, Boolean active, ArrayList<ArrayList<Spot>> gameBoard) {
+        //para todos os spots estarem dentro do GridLayout com o mesmo tamanho
 
-        shape.setShape(GradientDrawable.RECTANGLE);
-        shape.setColor(Color.argb(255, 185, 226, 235));
+        for (int i = 0; i < gameBoard.size(); i++) {
+            for (int j = 0; j < gameBoard.get(i).size(); j++) {
 
-        for (int i = 0; i < board.getRowCount(); i++) {
-            for (int j = 0; j < board.getColumnCount(); j++) {
-
-                //para todos os spots estarem dentro do GridLayout com o mesmo tamanho
                 GridLayout.LayoutParams param = new GridLayout.LayoutParams(
                         GridLayout.spec(GridLayout.UNDEFINED, 1f),
                         GridLayout.spec(GridLayout.UNDEFINED, 1f)
@@ -75,19 +74,31 @@ public class BoardGame extends AppCompatActivity {
                 param.width = 0;
                 param.height = 0;
 
+                Spot boardSpot = gameBoard.get(i).get(j);
+
+
                 TextView spot = new TextView(this);
-                GradientDrawable tempShape = shape;
                 spot.setTag(i + "," + j);
 
-                tempShape.setStroke(2, Color.argb(255, 255, 255, 255));
-                spot.setBackground(tempShape);
+                Log.d("noTag", "fillBoard: " + boardSpot.getCurrentColor());
+
+                spot.setBackground(boardSpot.getShape());
 
 
                 if (active) {
                     spot.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            spotPressed(v);
+
+                            if (!boardSpot.isLive()) {
+                                Log.d("ATTACK", "onClick: ded");
+                                return;
+                            }
+                            String pos = v.getTag().toString();
+                            Log.d("ATTACK", "onClick: " + pos);
+                            String[] posCords = pos.split(",");
+                            playerPlay(Integer.parseInt(posCords[0]), Integer.parseInt(posCords[1]));
+                            v.setBackground(boardSpot.getShape());
                         }
                     });
 
@@ -99,8 +110,9 @@ public class BoardGame extends AppCompatActivity {
 
     }
 
-    public void spotPressed(View v) {
-        v.setBackgroundColor(Color.RED);
+    private void playerPlay(int x, int y) {
+        enemyBoard.attackSpot(x, y);
 
     }
+
 }
