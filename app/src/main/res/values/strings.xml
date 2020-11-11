@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">battleship</string>
+    <string name="player_vs_computer">Player VS Computer</string>
+    <string name="player_vs_player">Player VS Player</string>
+    <string name="leaderboard">Leaderboard</string>
+    <string name="easy">Easy</string>
+    <string name="medium">Medium</string>
+    <string name="hard">Hard</string>
+    <string name="press_twice"> Press twice to exit</string>
+</resources>
