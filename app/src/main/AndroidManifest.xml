@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Battleship">
         <activity android:name=".PlaceNavy"></activity>
-        <activity android:name=".BoardGame" />
+        <activity android:name=".GameActivity" />
         <activity android:name=".PlayerVSPhone_difficulty" />
         <activity android:name=".MainActivity">
             <intent-filter>

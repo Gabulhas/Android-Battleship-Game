@@ -13,14 +13,14 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import guilherme.battlleship.GameLogic.GameBoard;
+import guilherme.battlleship.GameLogic.PlayerBoard;
 import guilherme.battlleship.GameLogic.Spot;
 
-public class BoardGame extends AppCompatActivity {
+public class GameActivity extends AppCompatActivity {
 
     boolean doubleBackToExitPressedOnce = false;
-    GameBoard playerBoard;
-    GameBoard enemyBoard;
+    PlayerBoard playerBoard;
+    PlayerBoard enemyBoard;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,11 +32,9 @@ public class BoardGame extends AppCompatActivity {
         GridLayout my_board = findViewById(R.id.my_board);
 
 
-        playerBoard = new GameBoard("Player");
-        enemyBoard = new GameBoard("Enemy");
-        Spot forTesting = new Spot(2, 3, 0, Color.parseColor("#651FFF"), Color.parseColor("#d50000"));
+        playerBoard = new PlayerBoard("Player");
+        enemyBoard = new PlayerBoard("Enemy");
 
-        enemyBoard.getMyBoard().get(2).set(3, forTesting);
         renderBoard(play_board, true, enemyBoard.getMyBoard());
         renderBoard(my_board, false, playerBoard.getMyBoard());
 
@@ -62,7 +60,6 @@ public class BoardGame extends AppCompatActivity {
     }
 
     public void renderBoard(GridLayout board, Boolean active, ArrayList<ArrayList<Spot>> gameBoard) {
-        //para todos os spots estarem dentro do GridLayout com o mesmo tamanho
 
         for (int i = 0; i < gameBoard.size(); i++) {
             for (int j = 0; j < gameBoard.get(i).size(); j++) {
@@ -71,6 +68,7 @@ public class BoardGame extends AppCompatActivity {
                         GridLayout.spec(GridLayout.UNDEFINED, 1f),
                         GridLayout.spec(GridLayout.UNDEFINED, 1f)
                 );
+
                 param.width = 0;
                 param.height = 0;
 
@@ -79,13 +77,15 @@ public class BoardGame extends AppCompatActivity {
 
                 TextView spot = new TextView(this);
                 spot.setTag(i + "," + j);
-
-                Log.d("noTag", "fillBoard: " + boardSpot.getCurrentColor());
-
                 spot.setBackground(boardSpot.getShape());
-
-
                 if (active) {
+
+                    if (boardSpot.isLive()) {
+                        spot.setBackground(Spot.neutralShape());
+                    } else {
+                        spot.setBackground(boardSpot.getShape());
+                    }
+
                     spot.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -101,6 +101,9 @@ public class BoardGame extends AppCompatActivity {
                             v.setBackground(boardSpot.getShape());
                         }
                     });
+
+                } else {
+                    spot.setBackground(boardSpot.getShape());
 
                 }
                 board.addView(spot, param);

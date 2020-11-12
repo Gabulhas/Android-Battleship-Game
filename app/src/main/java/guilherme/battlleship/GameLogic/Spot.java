@@ -8,11 +8,14 @@ import android.widget.TextView;
 
 
 public class Spot {
+    private static final int neutralColor = Color.parseColor("#90CAF9");
+
     private boolean isLive;
+    private Point point;
     private int liveColor;
     private int deadColor;
     private boolean containsShip;
-    private int shipNum;
+    private Ship.ShipTypes shipType;
     private GradientDrawable shape;
 
     public GradientDrawable getShape() {
@@ -25,31 +28,48 @@ public class Spot {
 
     public Spot(int x, int y) {
         this.isLive = true;
-        this.liveColor = Color.parseColor("#90CAF9");
+        this.liveColor = Spot.neutralColor;
         this.deadColor = Color.parseColor("#757575");
 
         this.point = new Point(x, y);
         this.containsShip = false;
-        this.shipNum = -1;
+        shipType = Ship.ShipTypes.NONE;
 
         this.shape = initShape();
         shape.setColor(this.liveColor);
     }
 
-    public Spot(int x, int y, int shipNum, int liveColor, int deadColor) {
+    public Spot(int x, int y, Ship ship) {
         this.isLive = true;
-        this.liveColor = liveColor;
-        this.deadColor = deadColor;
+        this.liveColor = ship.getColor();
+        this.deadColor = Ship.DestroyedColour;
 
         this.point = new Point(x, y);
         this.containsShip = true;
-        this.shipNum = shipNum;
+        this.shipType = ship.getShipType();
 
         this.shape = initShape();
         shape.setColor(this.liveColor);
+        shape.setStroke(2, Color.BLACK);
 
     }
-    private static GradientDrawable initShape(){
+
+
+    public Ship.ShipTypes getShipType() {
+        return shipType;
+    }
+
+    public void setShipType(Ship.ShipTypes shipType) {
+        this.shipType = shipType;
+    }
+
+    public static GradientDrawable neutralShape() {
+        GradientDrawable shape = initShape();
+        shape.setColor(neutralColor);
+        return shape;
+    }
+
+    private static GradientDrawable initShape() {
         GradientDrawable shape = new GradientDrawable();
         shape.setShape(GradientDrawable.RECTANGLE);
         shape.setStroke(2, Color.argb(255, 255, 255, 255));
@@ -64,14 +84,6 @@ public class Spot {
         this.containsShip = containsShip;
     }
 
-    public int getShipNum() {
-        return shipNum;
-    }
-
-    public void setShipNum(int shipNum) {
-        this.shipNum = shipNum;
-    }
-
 
     public int getCurrentColor() {
 
@@ -81,8 +93,6 @@ public class Spot {
         return deadColor;
 
     }
-
-    private Point point;
 
 
     public boolean isLive() {

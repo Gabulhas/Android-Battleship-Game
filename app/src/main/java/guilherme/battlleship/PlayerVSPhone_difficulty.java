@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 public class PlayerVSPhone_difficulty extends AppCompatActivity {
@@ -37,7 +36,7 @@ public class PlayerVSPhone_difficulty extends AppCompatActivity {
                 break;
 
         }
-        Intent intent = new Intent(this, BoardGame.class);
+        Intent intent = new Intent(this, GameActivity.class);
         intent.putExtra("difficulty", difficulty);
 
         startActivity(intent);
