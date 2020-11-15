@@ -3,17 +3,13 @@ package guilherme.battlleship;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.GridLayout;
-import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import guilherme.battlleship.utils.*;
 
 import java.util.ArrayList;
 
@@ -29,8 +25,9 @@ public class GameActivity extends AppCompatActivity {
     private GridLayout play_board; //Board that allows the Player to attack
     private GridLayout my_board; //Board that displays Playing Player's board
     private ComputerPlayer computerPlayer;
-    private boolean playerOneTurn;
+    private boolean playerOneTurn = true;
     private boolean playerVsComputer;
+    private boolean canPlayerClick = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +96,9 @@ public class GameActivity extends AppCompatActivity {
                             if (!boardSpot.isLive()) {
                                 Log.d("ATTACK", "onClick: ded");
                                 utils.sendToast("This spot was already shot.", getApplicationContext());
+                                return;
+                            }
+                            if (!canPlayerClick) {
                                 return;
                             }
                             String pos = v.getTag().toString();
@@ -173,26 +173,28 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void swapBoards() {
-        //hides boards
         this.play_board.setVisibility(View.INVISIBLE);
         this.my_board.setVisibility(View.INVISIBLE);
-        TextView swappingPlayers = new TextView(getApplicationContext());
-        swappingPlayers.setText(R.string.swap_players_message);
+        findViewById(R.id.my_board_text).setVisibility(View.INVISIBLE);
+        findViewById(R.id.attack_board_text).setVisibility(View.INVISIBLE);
+        findViewById(R.id.swap_message).setVisibility(View.VISIBLE);
 
+        this.play_board.removeAllViews();
+        this.my_board.removeAllViews();
         if (!playerOneTurn) {
-            renderBoard(play_board, true, enemyBoard.getMyBoard());
-            renderBoard(my_board, false, playerBoard.getMyBoard());
-            setTitle("Player 1");
-
-        } else {
+            setTitle("Player 2");
             renderBoard(play_board, true, playerBoard.getMyBoard());
             renderBoard(my_board, false, enemyBoard.getMyBoard());
-            setTitle("Player 2");
+        } else {
+            setTitle("Player 1");
+            renderBoard(play_board, true, enemyBoard.getMyBoard());
+            renderBoard(my_board, false, playerBoard.getMyBoard());
         }
         showBoards();
 
 
     }
+
 
     private void showBoards() {
         new Handler().postDelayed(new Runnable() {
@@ -200,9 +202,12 @@ public class GameActivity extends AppCompatActivity {
             public void run() {
                 play_board.setVisibility(View.VISIBLE);
                 my_board.setVisibility(View.VISIBLE);
+                findViewById(R.id.my_board_text).setVisibility(View.VISIBLE);
+                findViewById(R.id.attack_board_text).setVisibility(View.VISIBLE);
+                findViewById(R.id.swap_message).setVisibility(View.INVISIBLE);
 
             }
-        }, 10000);
+        }, 3000);
     }
 
     private void playVsPlayer(int x, int y) {
@@ -220,7 +225,6 @@ public class GameActivity extends AppCompatActivity {
                 utils.sendToast("Destroyed a ship. " + enemyBoard.getPlayerShips().size() + " left.", getApplicationContext());
             }
             this.playerOneTurn = false;
-            swapBoards();
 
         } else {
             if (playerBoard.attackSpot(x, y)) {
@@ -235,9 +239,16 @@ public class GameActivity extends AppCompatActivity {
                 utils.sendToast("Destroyed a ship. " + playerBoard.getPlayerShips().size() + " left.", getApplicationContext());
             }
             this.playerOneTurn = true;
-            swapBoards();
 
         }
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                swapBoards();
+                canPlayerClick = true;
+
+            }
+        }, 1000);
 
 
     }
@@ -248,6 +259,7 @@ public class GameActivity extends AppCompatActivity {
             playVsComputer(x, y);
             return;
         }
+        canPlayerClick = false;
         playVsPlayer(x, y);
     }
 

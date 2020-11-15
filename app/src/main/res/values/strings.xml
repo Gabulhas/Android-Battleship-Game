@@ -8,4 +8,7 @@
     <string name="hard">Hard</string>
     <string name="press_twice"> Press twice to exit</string>
     <string name="swap_players_message">Please swap players.</string>
+    <string name="swap_message_text">Swap Players.</string>
+    <string name="attack_board">Attack Board</string>
+    <string name="my_board">My Board</string>
 </resources>

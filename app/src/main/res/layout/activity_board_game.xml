@@ -38,28 +38,30 @@
     </GridLayout>
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/my_board_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="My Board"
+        android:text="@string/my_board"
         app:layout_constraintBottom_toTopOf="@+id/my_board"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/attack_board_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Attack Board"
+        android:text="@string/attack_board"
         app:layout_constraintBottom_toTopOf="@+id/play_board"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/swap_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
+        android:text="@string/swap_message_text"
+        android:textSize="40sp"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
