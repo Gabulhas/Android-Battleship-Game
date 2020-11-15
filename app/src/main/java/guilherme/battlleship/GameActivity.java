@@ -2,61 +2,67 @@ package guilherme.battlleship;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.GridLayout;
+import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import guilherme.battlleship.utils.*;
+
 import java.util.ArrayList;
 
+import guilherme.battlleship.GameLogic.ComputerPlayer;
 import guilherme.battlleship.GameLogic.PlayerBoard;
 import guilherme.battlleship.GameLogic.Spot;
 
 public class GameActivity extends AppCompatActivity {
 
-    boolean doubleBackToExitPressedOnce = false;
-    PlayerBoard playerBoard;
-    PlayerBoard enemyBoard;
+    private boolean doubleBackToExitPressedOnce = false;
+    private PlayerBoard playerBoard; //or 1st player
+    private PlayerBoard enemyBoard; //or 2nd player
+    private GridLayout play_board; //Board that allows the Player to attack
+    private GridLayout my_board; //Board that displays Playing Player's board
+    private ComputerPlayer computerPlayer;
+    private boolean playerOneTurn;
+    private boolean playerVsComputer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle("Player");
         setContentView(R.layout.activity_board_game);
 
-        GridLayout play_board = findViewById(R.id.play_board);
-        GridLayout my_board = findViewById(R.id.my_board);
+        Intent intent = getIntent();
+        String difficulty = intent.getStringExtra("difficulty");
 
+        play_board = findViewById(R.id.play_board);
+        my_board = findViewById(R.id.my_board);
 
-        playerBoard = new PlayerBoard("Player");
-        enemyBoard = new PlayerBoard("Enemy");
+        //Player vs Computer Game
+        if (!difficulty.equals("multiplayer")) {
+            setTitle("Player VS Computer -" + difficulty);
+            this.computerPlayer = new ComputerPlayer(difficulty);
+            this.playerVsComputer = true;
+            playerBoard = new PlayerBoard("Player");
+            enemyBoard = new PlayerBoard("Enemy");
+        } else {
+
+            setTitle("Player 1");
+            this.playerVsComputer = false;
+
+            playerBoard = new PlayerBoard("Player 1");
+            enemyBoard = new PlayerBoard("Player 2");
+        }
+
 
         renderBoard(play_board, true, enemyBoard.getMyBoard());
         renderBoard(my_board, false, playerBoard.getMyBoard());
 
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (doubleBackToExitPressedOnce) {
-            super.onBackPressed();
-            return;
-        }
-
-        this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, getString(R.string.press_twice), Toast.LENGTH_SHORT).show();
-
-        new Handler().postDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-                doubleBackToExitPressedOnce = false;
-            }
-        }, 2000);
     }
 
     public void renderBoard(GridLayout board, Boolean active, ArrayList<ArrayList<Spot>> gameBoard) {
@@ -92,6 +98,7 @@ public class GameActivity extends AppCompatActivity {
 
                             if (!boardSpot.isLive()) {
                                 Log.d("ATTACK", "onClick: ded");
+                                utils.sendToast("This spot was already shot.", getApplicationContext());
                                 return;
                             }
                             String pos = v.getTag().toString();
@@ -113,9 +120,135 @@ public class GameActivity extends AppCompatActivity {
 
     }
 
-    private void playerPlay(int x, int y) {
-        enemyBoard.attackSpot(x, y);
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
+        }
 
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, getString(R.string.press_twice), Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce = false;
+            }
+        }, 2000);
+    }
+
+
+    private void endGame(String winnerText, String points) {
+        Intent intent = new Intent(this, EndGame.class);
+        intent.putExtra("winnerText", winnerText);
+        intent.putExtra("points", points);
+        startActivity(intent);
+    }
+
+
+    private void playVsComputer(int x, int y) {
+        if (enemyBoard.attackSpot(x, y)) {
+            if (enemyBoard.getPlayerShips().size() == 0) {
+                //PLAYER WON
+                //EXIT HERE
+                utils.sendToast("YOU WON", getApplicationContext());
+
+                endGame("YOU WON", "NOT ADDED YET");
+                return;
+            }
+            utils.sendToast("Destroyed a ship. " + enemyBoard.getPlayerShips().size() + " left.", getApplicationContext());
+        }
+
+        if (computerPlayer.play(playerBoard)) {
+            if (playerBoard.getPlayerShips().size() == 0) {
+                utils.sendToast("YOU LOST", getApplicationContext());
+                endGame("YOU LOST", "NOT ADDED YET");
+                return;
+            }
+            utils.sendToast("One of your ships was destroyed", getApplicationContext());
+
+        }
+    }
+
+    private void swapBoards() {
+        //hides boards
+        this.play_board.setVisibility(View.INVISIBLE);
+        this.my_board.setVisibility(View.INVISIBLE);
+        TextView swappingPlayers = new TextView(getApplicationContext());
+        swappingPlayers.setText(R.string.swap_players_message);
+
+        if (!playerOneTurn) {
+            renderBoard(play_board, true, enemyBoard.getMyBoard());
+            renderBoard(my_board, false, playerBoard.getMyBoard());
+            setTitle("Player 1");
+
+        } else {
+            renderBoard(play_board, true, playerBoard.getMyBoard());
+            renderBoard(my_board, false, enemyBoard.getMyBoard());
+            setTitle("Player 2");
+        }
+        showBoards();
+
+
+    }
+
+    private void showBoards() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                play_board.setVisibility(View.VISIBLE);
+                my_board.setVisibility(View.VISIBLE);
+
+            }
+        }, 10000);
+    }
+
+    private void playVsPlayer(int x, int y) {
+
+        if (playerOneTurn) {
+            if (enemyBoard.attackSpot(x, y)) {
+                if (enemyBoard.getPlayerShips().size() == 0) {
+                    //PLAYER ONE WON
+                    //EXIT HERE
+                    utils.sendToast("Player 1 WON!", getApplicationContext());
+
+                    endGame("Player 1 WON!", "NOT ADDED YET");
+                    return;
+                }
+                utils.sendToast("Destroyed a ship. " + enemyBoard.getPlayerShips().size() + " left.", getApplicationContext());
+            }
+            this.playerOneTurn = false;
+            swapBoards();
+
+        } else {
+            if (playerBoard.attackSpot(x, y)) {
+                if (playerBoard.getPlayerShips().size() == 0) {
+                    //PLAYER ONE WON
+                    //EXIT HERE
+                    utils.sendToast("Player 2 WON!", getApplicationContext());
+
+                    endGame("Player 2 WON!", "NOT ADDED YET");
+                    return;
+                }
+                utils.sendToast("Destroyed a ship. " + playerBoard.getPlayerShips().size() + " left.", getApplicationContext());
+            }
+            this.playerOneTurn = true;
+            swapBoards();
+
+        }
+
+
+    }
+
+
+    private void playerPlay(int x, int y) {
+        if (this.playerVsComputer) {
+            playVsComputer(x, y);
+            return;
+        }
+        playVsPlayer(x, y);
     }
 
 }

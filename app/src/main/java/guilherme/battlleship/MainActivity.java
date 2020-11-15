@@ -19,4 +19,11 @@ public class MainActivity extends AppCompatActivity {
         Intent startGame = new Intent(this, PlayerVSPhone_difficulty.class);
         startActivity(startGame);
     }
+
+    public void multiplayerGame(View view){
+        Intent startGame = new Intent(this, GameActivity.class);
+        startGame.putExtra("difficulty", "multiplayer");
+        startActivity(startGame);
+
+    }
 }

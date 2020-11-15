@@ -17,7 +17,7 @@ import static guilherme.battlleship.GameLogic.direction.directions.*;
  */
 public class PlayerBoard {
     private String player;
-    private Ship[] playerShips;
+    private ArrayList<Ship> playerShips = new ArrayList<>();
     private ArrayList<ArrayList<Spot>> myBoard;
 
     public PlayerBoard(String player) {
@@ -42,15 +42,11 @@ public class PlayerBoard {
 
 
     public void randomPlaceShips() {
-        Random ran = new Random();
-
-
         randomPlaceShip(Ship.Battleship(direction.randomDirection()));
         randomPlaceShip(Ship.Carrier(direction.randomDirection()));
         randomPlaceShip(Ship.Destroyer(direction.randomDirection()));
         randomPlaceShip(Ship.Submarine(direction.randomDirection()));
         randomPlaceShip(Ship.Cruiser(direction.randomDirection()));
-
     }
 
 
@@ -70,32 +66,31 @@ public class PlayerBoard {
         switch (ship.getdirection()) {
             case RIGHT:
                 for (int i = point.x; i < point.x + size; i++) {
-                    this.myBoard.get(point.y).set(i, new Spot(i, point.y, ship));
+                    this.myBoard.get(i).set(point.y, new Spot(i, point.y, ship));
                 }
 
                 break;
             case LEFT:
                 for (int i = point.x; i > point.x - size; i--) {
-                    this.myBoard.get(point.y).set(i, new Spot(i, point.y, ship));
+                    this.myBoard.get(i).set(point.y, new Spot(i, point.y, ship));
                 }
                 break;
             case DOWN:
                 for (int i = point.y; i < point.y + size; i++) {
-                    this.myBoard.get(i).set(point.x, new Spot(point.x, i, ship));
+                    this.myBoard.get(point.x).set(i, new Spot(point.x, i, ship));
                 }
                 break;
             case UP:
                 for (int i = point.y; i > point.y - size; i--) {
-                    this.myBoard.get(i).set(point.x, new Spot(point.x, i, ship));
+                    this.myBoard.get(point.x).set(i, new Spot(point.x, i, ship));
                 }
                 break;
         }
-
+        this.playerShips.add(ship);
     }
 
     private Boolean checkPlacement(Point point, int size, direction.directions direction) {
         Log.d("testing", "placeShip: " + point + " " + size + " " + direction);
-        size = size - 1; //because the point is also a part
         switch (direction) {
             case RIGHT:
                 Log.d("switch testing", direction + "");
@@ -103,7 +98,7 @@ public class PlayerBoard {
                     return false;
                 }
                 for (int i = point.x; i < point.x + size; i++) {
-                    if (this.myBoard.get(point.y).get(i).isContainsShip()) {
+                    if (this.myBoard.get(i).get(point.y).isContainsShip()) {
                         return false;
                     }
                 }
@@ -114,7 +109,7 @@ public class PlayerBoard {
                     return false;
                 }
                 for (int i = point.x; i > point.x - size; i--) {
-                    if (this.myBoard.get(point.y).get(i).isContainsShip()) {
+                    if (this.myBoard.get(i).get(point.y).isContainsShip()) {
                         return false;
                     }
                 }
@@ -125,7 +120,7 @@ public class PlayerBoard {
                     return false;
                 }
                 for (int i = point.y; i < point.y + size; i++) {
-                    if (this.myBoard.get(i).get(point.x).isContainsShip()) {
+                    if (this.myBoard.get(point.x).get(i).isContainsShip()) {
                         return false;
                     }
                 }
@@ -136,7 +131,7 @@ public class PlayerBoard {
                     return false;
                 }
                 for (int i = point.y; i > point.y - size; i--) {
-                    if (this.myBoard.get(i).get(point.x).isContainsShip()) {
+                    if (this.myBoard.get(point.x).get(i).isContainsShip()) {
                         return false;
                     }
                 }
@@ -144,6 +139,14 @@ public class PlayerBoard {
         }
 
         return true;
+    }
+
+    public ArrayList<Ship> getPlayerShips() {
+        return playerShips;
+    }
+
+    public void setPlayerShips(ArrayList<Ship> playerShips) {
+        this.playerShips = playerShips;
     }
 
     public String getPlayer() {
@@ -154,14 +157,23 @@ public class PlayerBoard {
         this.player = player;
     }
 
-    public Ship[] getPlayerShips() {
-        return playerShips;
+    public Boolean isInBoard(int x, int y) {
+        return (x <= 9) && (x >= 0) && (y <= 9) && (y >= 0);
     }
 
-    public void setPlayerShips(Ship[] playerShips) {
-        this.playerShips = playerShips;
+    public Boolean isInBoard(Point point) {
+        int x = point.x;
+        int y = point.y;
+        return (x <= 9) && (x >= 0) && (y <= 9) && (y >= 0);
     }
 
+    public Spot getSpotOnPoint(int x, int y) {
+        return this.myBoard.get(x).get(y);
+    }
+
+    public Spot getSpotOnPoint(Point point) {
+        return this.myBoard.get(point.x).get(point.y);
+    }
 
     public ArrayList<ArrayList<Spot>> getMyBoard() {
         return myBoard;
@@ -174,13 +186,38 @@ public class PlayerBoard {
         return null;
     }
 
-    public void attackSpot(int x, int y) {
+    public void destroyShip(Ship ship) {
+
+        for (int i = 0; i < this.playerShips.size(); i++) {
+            Ship myShip = this.playerShips.get(i);
+            if (myShip.getShipType().equals(ship.getShipType())) {
+                this.playerShips.remove(i);
+                return;
+            }
+        }
+    }
+
+    /**
+     * @param x
+     * @param y
+     * @return if last attack destroyed a ship
+     */
+    public boolean attackSpot(int x, int y) {
         Spot attackedSpot = this.myBoard.get(x).get(y);
+        Log.d("ATTACK", "attackSpot: Attacking " + this.player + " on " + attackedSpot);
         attackedSpot.destroy();
 
         if (attackedSpot.isContainsShip()) {
-            getShipOnSpot(attackedSpot).destroyPart();
+            Ship ship = getShipOnSpot(attackedSpot);
+            ship.destroyPart();
+            Log.d("SHIP", "SHIP" + ship.getLiveParts());
+            if (!ship.isLive()) {
+                destroyShip(ship);
+                return true;
+            }
+
         }
+        return false;
 
     }
 

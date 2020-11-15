@@ -111,4 +111,18 @@ public class Spot {
     public void setPoint(Point point) {
         this.point = point;
     }
+
+
+    @Override
+    public String toString() {
+        return "Spot{" +
+                "is alive=" + isLive +
+                ", point=" + point +
+                ", liveColor=" + liveColor +
+                ", deadColor=" + deadColor +
+                ", containsShip=" + containsShip +
+                ", shipType=" + shipType +
+                ", shape=" + shape +
+                '}';
+    }
 }
