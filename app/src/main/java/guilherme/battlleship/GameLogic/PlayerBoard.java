@@ -1,16 +1,9 @@
 package guilherme.battlleship.GameLogic;
 
-import java.util.Random;
-
-import android.graphics.Color;
 import android.graphics.Point;
 import android.util.Log;
 
 import java.util.ArrayList;
-
-import guilherme.battlleship.utils;
-
-import static guilherme.battlleship.GameLogic.direction.directions.*;
 
 /***
  * Board of a player

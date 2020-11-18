@@ -50,17 +50,12 @@ public class Spot {
 
         this.shape = initShape();
         shape.setColor(this.liveColor);
-        shape.setStroke(2, Color.BLACK);
 
     }
 
 
     public Ship.ShipTypes getShipType() {
         return shipType;
-    }
-
-    public void setShipType(Ship.ShipTypes shipType) {
-        this.shipType = shipType;
     }
 
     public static GradientDrawable neutralShape() {
@@ -80,20 +75,6 @@ public class Spot {
         return containsShip;
     }
 
-    public void setContainsShip(boolean containsShip) {
-        this.containsShip = containsShip;
-    }
-
-
-    public int getCurrentColor() {
-
-        if (isLive()) {
-            return liveColor;
-        }
-        return deadColor;
-
-    }
-
 
     public boolean isLive() {
         return isLive;
@@ -106,10 +87,6 @@ public class Spot {
 
     public Point getPoint() {
         return point;
-    }
-
-    public void setPoint(Point point) {
-        this.point = point;
     }
 
 

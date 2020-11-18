@@ -2,8 +2,6 @@ package guilherme.battlleship.GameLogic;
 
 import android.graphics.Point;
 
-import guilherme.battlleship.utils;
-
 public class direction {
     public enum directions {
         UP,

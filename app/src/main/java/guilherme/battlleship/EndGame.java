@@ -30,8 +30,10 @@ public class EndGame extends AppCompatActivity {
 
     }
 
-    private void goToMenu(View view){
-        Intent intent = new Intent(this, MainActivity.class);
+    public void goToMainActivity(View view){
+        Intent intent = new Intent(this.getApplicationContext(), MainActivity.class);
+
         startActivity(intent);
     }
+
 }

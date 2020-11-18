@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import guilherme.battlleship.GameLogic.ComputerPlayer;
 import guilherme.battlleship.GameLogic.PlayerBoard;
 import guilherme.battlleship.GameLogic.Spot;
+import guilherme.battlleship.GameLogic.utils;
 
 public class GameActivity extends AppCompatActivity {
 
