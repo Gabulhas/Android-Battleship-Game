@@ -37,11 +37,8 @@ public class PlayerVSPhone_difficulty extends AppCompatActivity {
 
         }
 
-        Intent thisIntent = getIntent();
-
         Intent intent = new Intent(this, GameActivity.class);
         intent.putExtra("difficulty", difficulty);
-        intent.putExtra("PlayerName", thisIntent.getStringExtra("PlayerName"));
 
         startActivity(intent);
 

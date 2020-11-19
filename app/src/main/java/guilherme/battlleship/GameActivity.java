@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.gridlayout.widget.GridLayout;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
@@ -30,6 +31,8 @@ public class GameActivity extends AppCompatActivity {
     private boolean playerOneTurn = true;
     private boolean playerVsComputer;
     private boolean canPlayerClick = true;
+    private String playerName;
+    private int plays = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,10 +48,13 @@ public class GameActivity extends AppCompatActivity {
 
         //Player vs Computer Game
         if (!difficulty.equals("multiplayer")) {
-            setTitle("Player VS Computer -" + difficulty);
+            setTitle("Player VS Computer - " + difficulty.toUpperCase());
             this.computerPlayer = new ComputerPlayer(difficulty);
             this.playerVsComputer = true;
-            playerBoard = new PlayerBoard("Player");
+            SharedPreferences oSP = getPreferences(MODE_PRIVATE);
+            String playerName = oSP.getString("playername", "NULL");
+
+            playerBoard = new PlayerBoard(playerName);
             enemyBoard = new PlayerBoard("Enemy");
         } else {
             String playerName = "Player 1";
@@ -147,22 +153,38 @@ public class GameActivity extends AppCompatActivity {
     }
 
 
-    private void endGame(String winnerText, String points) {
+    private void endGame(String winnerText, String player, int points, int plays, int left_ships) {
         Intent intent = new Intent(this, EndGame.class);
         intent.putExtra("winnerText", winnerText);
         intent.putExtra("points", points);
+        intent.putExtra("plays", plays);
+        intent.putExtra("player", player);
+        intent.putExtra("left_ships", left_ships);
         startActivity(intent);
     }
 
 
+    private int calculate_points() {
+
+        float minimum_plays = 17;
+        float maximum_points = 100;
+
+        return (int) (minimum_plays * maximum_points) / this.plays;
+
+    }
+
+    //PLAYER VS COMPUTER
     private void playVsComputer(int x, int y) {
+
+        this.plays += 1;
+
         if (enemyBoard.attackSpot(x, y)) {
             if (enemyBoard.getPlayerShips().size() == 0) {
                 //PLAYER WON
                 //EXIT HERE
                 utils.sendToast("YOU WON", getApplicationContext());
 
-                endGame("YOU WON", "NOT ADDED YET");
+                endGame("YOU WON", this.playerName, calculate_points(), this.plays, playerBoard.getPlayerShips().size());
                 return;
             }
             utils.sendToast("Destroyed a ship. " + enemyBoard.getPlayerShips().size() + " left.", getApplicationContext());
@@ -171,13 +193,16 @@ public class GameActivity extends AppCompatActivity {
         if (computerPlayer.play(playerBoard)) {
             if (playerBoard.getPlayerShips().size() == 0) {
                 utils.sendToast("YOU LOST", getApplicationContext());
-                endGame("YOU LOST", "NOT ADDED YET");
+                endGame("YOU LOST", this.playerName, -1, this.plays, enemyBoard.getPlayerShips().size());
                 return;
             }
             utils.sendToast("One of your ships was destroyed", getApplicationContext());
 
         }
     }
+
+
+    //PLAYER VS PLAYER
 
     private void swapBoards() {
         this.play_board.setVisibility(View.INVISIBLE);
@@ -233,7 +258,7 @@ public class GameActivity extends AppCompatActivity {
                     //EXIT HERE
                     utils.sendToast("Player 1 WON!", getApplicationContext());
 
-                    endGame("Player 1 WON!", "NOT ADDED YET");
+                    endGame("Player 1 WON!", "Player 1", -1, this.plays, playerBoard.getPlayerShips().size());
                     return;
                 }
                 utils.sendToast("Destroyed a ship. " + enemyBoard.getPlayerShips().size() + " left.", getApplicationContext());
@@ -247,7 +272,7 @@ public class GameActivity extends AppCompatActivity {
                     //EXIT HERE
                     utils.sendToast("Player 2 WON!", getApplicationContext());
 
-                    endGame("Player 2 WON!", "NOT ADDED YET");
+                    endGame("Player 2 WON!", "Player 2", -1, this.plays, enemyBoard.getPlayerShips().size());
                     return;
                 }
                 utils.sendToast("Destroyed a ship. " + playerBoard.getPlayerShips().size() + " left.", getApplicationContext());

@@ -10,10 +10,9 @@
     <TextView
         android:id="@+id/winner_text"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:textSize="300dp"
-        android:autoSizeTextType="uniform"
-        android:text="TESTING.........."
+        android:layout_height="220dp"
+
+        android:text="HEYO"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

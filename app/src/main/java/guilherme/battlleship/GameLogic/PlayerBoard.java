@@ -10,6 +10,7 @@ import java.util.ArrayList;
  */
 public class PlayerBoard {
     private String player;
+    private int plays = 0;
     private ArrayList<Ship> playerShips = new ArrayList<>();
     private ArrayList<ArrayList<Spot>> myBoard;
 
@@ -190,11 +191,6 @@ public class PlayerBoard {
         }
     }
 
-    /**
-     * @param x
-     * @param y
-     * @return if last attack destroyed a ship
-     */
     public boolean attackSpot(int x, int y) {
         Spot attackedSpot = this.myBoard.get(x).get(y);
         Log.d("ATTACK", "attackSpot: Attacking " + this.player + " on " + attackedSpot);

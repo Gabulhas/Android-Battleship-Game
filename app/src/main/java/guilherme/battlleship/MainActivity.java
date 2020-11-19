@@ -35,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void startGamePhone(View view) {
         Intent startGame = new Intent(this, PlayerVSPhone_difficulty.class);
-        startGame.putExtra("PlayerName", playerName);
         startActivity(startGame);
     }
 
