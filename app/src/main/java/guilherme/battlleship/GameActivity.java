@@ -1,6 +1,7 @@
 package guilherme.battlleship;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.gridlayout.widget.GridLayout;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -8,7 +9,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
-import android.widget.GridLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,9 +51,13 @@ public class GameActivity extends AppCompatActivity {
             playerBoard = new PlayerBoard("Player");
             enemyBoard = new PlayerBoard("Enemy");
         } else {
+            String playerName = "Player 1";
 
-            setTitle("Player 1");
+            setTitle(playerName);
             this.playerVsComputer = false;
+            TextView player_name = (TextView) findViewById(R.id.player_name);
+            player_name.setText(playerName);
+            player_name.setVisibility(View.VISIBLE);
 
             playerBoard = new PlayerBoard("Player 1");
             enemyBoard = new PlayerBoard("Player 2");
@@ -178,21 +182,27 @@ public class GameActivity extends AppCompatActivity {
     private void swapBoards() {
         this.play_board.setVisibility(View.INVISIBLE);
         this.my_board.setVisibility(View.INVISIBLE);
+        TextView player_name = (TextView) findViewById(R.id.player_name);
+        player_name.setVisibility(View.INVISIBLE);
+
         findViewById(R.id.my_board_text).setVisibility(View.INVISIBLE);
         findViewById(R.id.attack_board_text).setVisibility(View.INVISIBLE);
         findViewById(R.id.swap_message).setVisibility(View.VISIBLE);
 
         this.play_board.removeAllViews();
         this.my_board.removeAllViews();
+        String playerName;
         if (!playerOneTurn) {
-            setTitle("Player 2");
+            playerName = "Player 2";
             renderBoard(play_board, true, playerBoard.getMyBoard());
             renderBoard(my_board, false, enemyBoard.getMyBoard());
         } else {
-            setTitle("Player 1");
+            playerName = "Player 1";
             renderBoard(play_board, true, enemyBoard.getMyBoard());
             renderBoard(my_board, false, playerBoard.getMyBoard());
         }
+        setTitle(playerName);
+        player_name.setText(playerName);
         showBoards();
 
 
@@ -205,6 +215,7 @@ public class GameActivity extends AppCompatActivity {
             public void run() {
                 play_board.setVisibility(View.VISIBLE);
                 my_board.setVisibility(View.VISIBLE);
+                findViewById(R.id.player_name).setVisibility(View.VISIBLE);
                 findViewById(R.id.my_board_text).setVisibility(View.VISIBLE);
                 findViewById(R.id.attack_board_text).setVisibility(View.VISIBLE);
                 findViewById(R.id.swap_message).setVisibility(View.INVISIBLE);

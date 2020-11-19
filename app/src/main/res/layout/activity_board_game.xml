@@ -8,45 +8,40 @@
 
     tools:context=".GameActivity">
 
-    <GridLayout
+    <androidx.gridlayout.widget.GridLayout
         android:id="@+id/play_board"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:columnCount="10"
-        android:rowCount="10"
+        app:columnCount="10"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:rowCount="10">
 
-    </GridLayout>
+    </androidx.gridlayout.widget.GridLayout>
 
-    <GridLayout
+    <androidx.gridlayout.widget.GridLayout
         android:id="@+id/my_board"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="64dp"
-        android:layout_marginTop="64dp"
-        android:layout_marginEnd="64dp"
-        android:layout_marginBottom="64dp"
-        android:columnCount="10"
-        android:rowCount="10"
-        app:layout_constraintBottom_toTopOf="@+id/play_board"
-        app:layout_constraintDimensionRatio="1:1"
+        app:columnCount="10"
+        app:layout_constraintBottom_toTopOf="@+id/attack_board_text"
+        app:layout_constraintDimensionRatio="1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/my_board_text"
+        app:rowCount="10">
 
-        app:layout_constraintTop_toTopOf="parent">
-
-    </GridLayout>
+    </androidx.gridlayout.widget.GridLayout>
 
     <TextView
         android:id="@+id/my_board_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/my_board"
-        app:layout_constraintBottom_toTopOf="@+id/my_board"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/attack_board_text"
@@ -66,6 +61,17 @@
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/player_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/play_board"
+        app:layout_constraintEnd_toStartOf="@+id/my_board"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
