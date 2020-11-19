@@ -9,8 +9,6 @@ import android.view.View;
 
 public class PlayerVSPhone_difficulty extends AppCompatActivity {
 
-    private static final String TAG = "Difficulty";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,8 +36,12 @@ public class PlayerVSPhone_difficulty extends AppCompatActivity {
                 break;
 
         }
+
+        Intent thisIntent = getIntent();
+
         Intent intent = new Intent(this, GameActivity.class);
         intent.putExtra("difficulty", difficulty);
+        intent.putExtra("PlayerName", thisIntent.getStringExtra("PlayerName"));
 
         startActivity(intent);
 
