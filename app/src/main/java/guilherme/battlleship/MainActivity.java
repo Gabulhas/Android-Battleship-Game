@@ -4,6 +4,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -23,9 +24,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        SharedPreferences oSP = getPreferences(MODE_PRIVATE);
+        SharedPreferences oSP = getSharedPreferences("settings", Context.MODE_PRIVATE);
         this.playerName = oSP.getString("playername", "NULL");
-        if (playerName.equals("NULL")) {
+        if (playerName.equals("NULL") || playerName.equals("") || playerName.equals(" ")) {
             pedirNome(null);
         }
         changeNameTV();
@@ -38,11 +39,18 @@ public class MainActivity extends AppCompatActivity {
         startActivity(startGame);
     }
 
+
     public void multiplayerGame(View view) {
         Intent startGame = new Intent(this, GameActivity.class);
         startGame.putExtra("difficulty", "multiplayer");
         startActivity(startGame);
 
+    }
+
+    public void leaderboard(View view) {
+
+        Intent leaderboard = new Intent(this, leaderboard.class);
+        startActivity(leaderboard);
     }
 
 
@@ -83,10 +91,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void saveName(String name) {
         playerName = name;
-        SharedPreferences oSP = getPreferences(MODE_PRIVATE);
+        SharedPreferences oSP = getSharedPreferences("settings", Context.MODE_PRIVATE);
         SharedPreferences.Editor oEditor = oSP.edit();
         oEditor.putString("playername", name);
-        oEditor.apply();
+        oEditor.commit();
         changeNameTV();
 
 

@@ -3,6 +3,7 @@ package guilherme.battlleship;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -28,7 +29,6 @@ public class EndGame extends AppCompatActivity {
         db = new database_connection(this);
 
         String winnerText = getIntent().getStringExtra("winnerText");
-        String player = getIntent().getStringExtra("player");
         String difficulty = getIntent().getStringExtra("difficulty");
         int points = getIntent().getIntExtra("points", -1);
         int plays = getIntent().getIntExtra("plays", -1);
@@ -43,7 +43,7 @@ public class EndGame extends AppCompatActivity {
             pointsView.setText(String.format("%s: %d", getString(R.string.points_string), points));
             if (!difficulty.equals("NULL")) {
 
-                SharedPreferences oSP = getPreferences(MODE_PRIVATE);
+                SharedPreferences oSP = getSharedPreferences("settings", Context.MODE_PRIVATE);
                 String playerName = oSP.getString("playername", "NULL");
 
                 saveToDB(playerName, points, plays, left_ships, difficulty);
@@ -51,7 +51,7 @@ public class EndGame extends AppCompatActivity {
         } else {
             pointsView.setText(" ");
         }
-        statsView.setText(String.format("%s: %d\n%s: %d", getString(R.string.stats_plays_string), plays, getString(R.string.stas_ships_left_string), left_ships));
+        statsView.setText(String.format("%s: %d\n%s: %d\n%s: %d%s", getString(R.string.stats_plays_string), plays, getString(R.string.stas_ships_left_string), left_ships, getString(R.string.stats_hit_rate), ((17 * 100) / plays), "%"));
 
 
     }
@@ -65,7 +65,6 @@ public class EndGame extends AppCompatActivity {
     private void saveToDB(String player, int points, int plays, int left_ships, String difficulty) {
         Log.d("STDB", "saveToDB: " + " " + player + " " + points + " " + plays + " " + left_ships);
         db.insertScore(player, points, plays, left_ships, difficulty);
-        db.debugRows();
     }
 
 }
