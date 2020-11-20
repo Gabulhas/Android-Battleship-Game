@@ -153,6 +153,17 @@ public class GameActivity extends AppCompatActivity {
     }
 
 
+    private void endGame(String winnerText, String player, int points, int plays, int left_ships, String difficulty) {
+        Intent intent = new Intent(this, EndGame.class);
+        intent.putExtra("winnerText", winnerText);
+        intent.putExtra("points", points);
+        intent.putExtra("plays", plays);
+        intent.putExtra("player", player);
+        intent.putExtra("left_ships", left_ships);
+        intent.putExtra("difficulty", difficulty);
+        startActivity(intent);
+    }
+
     private void endGame(String winnerText, String player, int points, int plays, int left_ships) {
         Intent intent = new Intent(this, EndGame.class);
         intent.putExtra("winnerText", winnerText);
@@ -160,6 +171,7 @@ public class GameActivity extends AppCompatActivity {
         intent.putExtra("plays", plays);
         intent.putExtra("player", player);
         intent.putExtra("left_ships", left_ships);
+        intent.putExtra("difficulty", "NULL");
         startActivity(intent);
     }
 
@@ -184,7 +196,7 @@ public class GameActivity extends AppCompatActivity {
                 //EXIT HERE
                 utils.sendToast("YOU WON", getApplicationContext());
 
-                endGame("YOU WON", this.playerName, calculate_points(), this.plays, playerBoard.getPlayerShips().size());
+                endGame("YOU WON", this.playerName, calculate_points(), this.plays, playerBoard.getPlayerShips().size(), computerPlayer.getDifficulty());
                 return;
             }
             utils.sendToast("Destroyed a ship. " + enemyBoard.getPlayerShips().size() + " left.", getApplicationContext());

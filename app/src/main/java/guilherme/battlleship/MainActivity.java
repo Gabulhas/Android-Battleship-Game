@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
         alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                if (playerName.equals("NULL")) {
+                if (playerName.equals("NULL") || playerName.trim().equals("")) {
                     pedirNome(null);
                 }
                 return;

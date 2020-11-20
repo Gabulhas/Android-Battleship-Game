@@ -11,5 +11,9 @@
     <string name="swap_message_text">Swap Players.</string>
     <string name="attack_board">Attack Board</string>
     <string name="my_board">My Board</string>
-    <string name="playing_as">Playing as:</string>
+    <string name="playing_as">Playing as: </string>
+    <string name="exit">Exit</string>
+    <string name="points_string">Points</string>
+    <string name="stats_plays_string">Plays</string>
+    <string name="stas_ships_left_string">Ships Left</string>
 </resources>

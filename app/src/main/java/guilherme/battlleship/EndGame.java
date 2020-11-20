@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,7 +13,11 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import guilherme.battlleship.other.database_connection;
+
 public class EndGame extends AppCompatActivity {
+
+    private database_connection db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,19 +25,34 @@ public class EndGame extends AppCompatActivity {
         setContentView(R.layout.activity_end_game);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+        db = new database_connection(this);
+
         String winnerText = getIntent().getStringExtra("winnerText");
         String player = getIntent().getStringExtra("player");
+        String difficulty = getIntent().getStringExtra("difficulty");
         int points = getIntent().getIntExtra("points", -1);
         int plays = getIntent().getIntExtra("plays", -1);
         int left_ships = getIntent().getIntExtra("left_ships", -1);
 
         TextView winnerView = (TextView) findViewById(R.id.winner_text);
         TextView pointsView = (TextView) findViewById(R.id.points_text);
+        TextView statsView = (TextView) findViewById(R.id.other_stats);
 
         winnerView.setText(winnerText);
-        pointsView.setText(points);
+        if (points != -1) {
+            pointsView.setText(String.format("%s: %d", getString(R.string.points_string), points));
+            if (!difficulty.equals("NULL")) {
 
-        saveToDB(winnerText, player, points, plays, left_ships);
+                SharedPreferences oSP = getPreferences(MODE_PRIVATE);
+                String playerName = oSP.getString("playername", "NULL");
+
+                saveToDB(playerName, points, plays, left_ships, difficulty);
+            }
+        } else {
+            pointsView.setText(" ");
+        }
+        statsView.setText(String.format("%s: %d\n%s: %d", getString(R.string.stats_plays_string), plays, getString(R.string.stas_ships_left_string), left_ships));
+
 
     }
 
@@ -42,9 +62,10 @@ public class EndGame extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void saveToDB(String winnerText, String player, int points, int plays, int left_ships) {
-
-        Log.d("STDB", "saveToDB: " +  winnerText+ " " +  player+ " " + points+ " " +  plays + "" + left_ships);
+    private void saveToDB(String player, int points, int plays, int left_ships, String difficulty) {
+        Log.d("STDB", "saveToDB: " + " " + player + " " + points + " " + plays + " " + left_ships);
+        db.insertScore(player, points, plays, left_ships, difficulty);
+        db.debugRows();
     }
 
 }

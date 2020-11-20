@@ -3,7 +3,6 @@ package guilherme.battlleship.GameLogic;
 import android.graphics.Point;
 import android.util.Log;
 
-import java.util.ArrayList;
 import java.util.Stack;
 
 /**
@@ -35,6 +34,22 @@ public class ComputerPlayer {
         } else if (difficulty.equals("hard")) {
             this.difficulty = Difficulty.HARD;
         }
+    }
+
+
+    public String getDifficulty() {
+
+        switch (difficulty) {
+
+            case EASY:
+                return "easy";
+            case MEDIUM:
+                return "medium";
+            case HARD:
+                return "hard";
+        }
+
+        return "easy";
     }
 
     public boolean play(PlayerBoard enemyBoard) {
@@ -178,7 +193,7 @@ public class ComputerPlayer {
                 if (enemyBoard.isInBoard(nextPoint) && enemyBoard.getSpotOnPoint(nextPoint).isLive()) {
                     destroyedShip = enemyBoard.attackSpot(nextPoint.x, nextPoint.y);
                     itCouldAttack = true;
-                    if(destroyedShip){
+                    if (destroyedShip) {
                         Point first = this.foundBoatParts.firstElement();
                         this.foundBoatParts.clear();
                         this.foundBoatParts.push(first);
