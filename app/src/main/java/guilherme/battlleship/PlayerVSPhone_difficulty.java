@@ -18,28 +18,9 @@ public class PlayerVSPhone_difficulty extends AppCompatActivity {
 
     public void selectDifficulty(View view) {
 
-        String difficulty = "";
-
-        switch (view.getId()) {
-            case R.id.easy_button:
-                difficulty = "easy";
-                break;
-            case R.id.medium_button:
-                difficulty = "medium";
-                break;
-            case R.id.hard_button:
-                difficulty = "hard";
-                break;
-
-            default:
-                difficulty = "easy";
-                break;
-
-        }
-
+        String difficulty = view.getTag().toString();
         Intent intent = new Intent(this, GameActivity.class);
         intent.putExtra("difficulty", difficulty);
-
         startActivity(intent);
 
     }

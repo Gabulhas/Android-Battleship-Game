@@ -45,7 +45,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         }
 
 
-        return PlaceholderFragment.newInstance(position + 1, difficulty);
+        return leaderboard_placeholder.newInstance(difficulty);
     }
 
     @Nullable

@@ -23,4 +23,7 @@
     <string name="tab_text_3">Hard</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="easy_button">EASY</string>
+    <string name="medium_button">MEDIUM</string>
+    <string name="hard_button">HARD</string>
 </resources>

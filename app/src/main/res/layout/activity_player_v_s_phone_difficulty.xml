@@ -1,42 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:screenOrientation="portrait"
+    android:orientation="vertical"
     tools:context=".PlayerVSPhone_difficulty">
 
-    <Button
-        android:id="@+id/easy_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/lay1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#8BC34A"
         android:onClick="selectDifficulty"
-        android:text="@string/easy"
-        app:layout_constraintBottom_toTopOf="@+id/medium_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:tag="easy">
 
-    <Button
-        android:id="@+id/medium_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="selectDifficulty"
-        android:text="@string/medium"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/textView01"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="selectDifficulty"
+            android:tag="easy"
+            android:text="@string/easy_button"
+            android:textSize="64sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <Button
-        android:id="@+id/hard_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/lay2"
+        android:layout_width="fill_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:background="#0277BD"
+        android:tag="medium">
+
+
+        <TextView
+            android:id="@+id/TextView02"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="selectDifficulty"
+            android:tag="medium"
+            android:text="@string/medium_button"
+            android:textSize="64sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/lay3"
+        android:layout_width="fill_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:background="#c62828"
         android:onClick="selectDifficulty"
-        android:text="@string/hard"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/medium_button" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:tag="hard">
+
+        <TextView
+            android:id="@+id/TextView03"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="selectDifficulty"
+            android:tag="hard"
+            android:text="@string/hard_button"
+            android:textSize="64sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>

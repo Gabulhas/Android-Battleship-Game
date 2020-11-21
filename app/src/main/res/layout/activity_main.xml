@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:onClick="startGamePhone"
         android:text="@string/player_vs_computer"
-        android:textSize="36sp"
+        android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/button3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -36,7 +36,7 @@
         android:layout_height="wrap_content"
         android:onClick="multiplayerGame"
         android:text="@string/player_vs_player"
-        android:textSize="36sp"
+        android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/button4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -47,8 +47,8 @@
         android:layout_height="wrap_content"
         android:onClick="leaderboard"
         android:text="@string/leaderboard"
-        android:textSize="36sp"
-        app:layout_constraintBottom_toTopOf="@+id/button"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/Tutorial"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -63,11 +63,11 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/Tutorial"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Tutorial"
-        android:textSize="36sp"
+        android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
