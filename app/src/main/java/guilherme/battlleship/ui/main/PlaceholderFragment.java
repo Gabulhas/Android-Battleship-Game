@@ -20,13 +20,15 @@ import guilherme.battlleship.R;
 public class PlaceholderFragment extends Fragment {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
+    private static final String ARG_SECTION_NAME = "section_name";
 
     private PageViewModel pageViewModel;
 
-    public static PlaceholderFragment newInstance(int index) {
+    public static PlaceholderFragment newInstance(int index, String difficulty) {
         PlaceholderFragment fragment = new PlaceholderFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(ARG_SECTION_NUMBER, index);
+        bundle.putString(ARG_SECTION_NAME, difficulty);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -36,10 +38,14 @@ public class PlaceholderFragment extends Fragment {
         super.onCreate(savedInstanceState);
         pageViewModel = new ViewModelProvider(this).get(PageViewModel.class);
         int index = 1;
+        String difficulty = "easy";
         if (getArguments() != null) {
             index = getArguments().getInt(ARG_SECTION_NUMBER);
+            difficulty = getArguments().getString(ARG_SECTION_NAME);
         }
+
         pageViewModel.setIndex(index);
+
     }
 
     @Override

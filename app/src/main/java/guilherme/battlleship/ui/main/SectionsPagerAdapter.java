@@ -17,7 +17,7 @@ import guilherme.battlleship.R;
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     @StringRes
-    private static final int[] TAB_TITLES = new int[]{R.string.tab_text_1, R.string.tab_text_2};
+    private static final int[] TAB_TITLES = new int[]{R.string.tab_text_1, R.string.tab_text_2, R.string.tab_text_3};
     private final Context mContext;
 
     public SectionsPagerAdapter(Context context, FragmentManager fm) {
@@ -29,34 +29,33 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         // getItem is called to instantiate the fragment for the given page.
         // Return a PlaceholderFragment (defined as a static inner class below).
-
-        Fragment fragment = null;
-
+        String difficulty = "easy";
         switch (position) {
             case 0:
+                difficulty = "easy";
+                break;
 
+            case 1:
+                difficulty = "medium";
+                break;
+
+            case 2:
+                difficulty = "hard";
+                break;
         }
 
-        return PlaceholderFragment.newInstance(position + 1);
+
+        return PlaceholderFragment.newInstance(position + 1, difficulty);
     }
 
     @Nullable
     @Override
     public CharSequence getPageTitle(int position) {
-        switch (position) {
-            case 0:
-                return "Easy";
-            case 1:
-                return "Medium";
-            case 2:
-                return "Hard";
-        }
-        return null;
+        return mContext.getResources().getString(TAB_TITLES[position]);
     }
 
     @Override
     public int getCount() {
-        // Show 2 total pages.
-        return 2;
+        return 3;
     }
 }

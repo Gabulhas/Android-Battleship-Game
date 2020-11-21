@@ -18,8 +18,9 @@
     <string name="stas_ships_left_string">Ships Left</string>
     <string name="stats_hit_rate">Hit Rate</string>
     <string name="title_activity_leaderboard">leaderboard</string>
-    <string name="tab_text_1">Tab 1</string>
-    <string name="tab_text_2">Tab 2</string>
+    <string name="tab_text_1">Easy</string>
+    <string name="tab_text_2">Medium</string>
+    <string name="tab_text_3">Hard</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

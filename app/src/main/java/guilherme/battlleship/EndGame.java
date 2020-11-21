@@ -1,5 +1,6 @@
 package guilherme.battlleship;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
@@ -56,7 +57,13 @@ public class EndGame extends AppCompatActivity {
 
     }
 
-    public void goToMainActivity(View view) {
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        goToMainActivity(null);
+    }
+
+    public void goToMainActivity(@Nullable View view) {
         Intent intent = new Intent(this.getApplicationContext(), MainActivity.class);
 
         startActivity(intent);
