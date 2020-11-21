@@ -10,6 +10,14 @@ import java.util.Stack;
  * medium - random but next play selects random point near a ship destruction
  * hard - plays on checkerboard (increases change of finding a ship) and tries to destroy the ship before trying to locate the next one
  */
+
+/*
+
+    Note:
+    Either I'm not a good player or my hard algorithm is way to good, since I can't win against it
+    Yet, it can stil be improved.
+
+ */
 public class ComputerPlayer {
 
     private Difficulty difficulty;

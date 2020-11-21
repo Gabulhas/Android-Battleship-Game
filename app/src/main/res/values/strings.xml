@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">battleship</string>
-    <string name="player_vs_computer">Player VS Computer</string>
+    <string name="player_vs_computer">Player VS Phone</string>
     <string name="player_vs_player">Player VS Player</string>
     <string name="leaderboard">Leaderboard</string>
     <string name="easy">Easy</string>
@@ -27,4 +27,5 @@
     <string name="medium_button">MEDIUM</string>
     <string name="hard_button">HARD</string>
     <string name="share">Share</string>
+    <string name="your_plays">Button</string>
 </resources>

@@ -43,7 +43,7 @@ public class database_connection extends SQLiteOpenHelper {
     private static final String get_top_ten =
             "SELECT  " + COLUMN1 + ", " + COLUMN2 + ", " + COLUMN3 + ", " + COLUMN4 + ", " + COLUMN5 + ", " + COLUMN6 + ", " + COLUMN7 + " " +
                     " FROM " + TABLE_NAME + " WHERE " +
-                    COLUMN3 + "=\"%s\" " + " ORDER BY " + COLUMN4 + " DESC LIMIT 10;";
+                    COLUMN3 + "=\"%s\" " + " ORDER BY " + COLUMN4 + " DESC";
 
 
     public database_connection(Context context) {
@@ -97,14 +97,16 @@ public class database_connection extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res = db.rawQuery(String.format(get_top_ten, difficulty), null);
         ArrayList<score> scores = new ArrayList<>();
-        res.moveToFirst();
 
-        while (res.moveToNext()) {
+        if (res.moveToFirst()) {
+            while (!res.isAfterLast()) {
 
-            score sc = score.fromCursor(res);
+                score sc = score.fromCursor(res);
 
-            Log.d("DB_OUT", "debugRows: " + sc.toString());
-            scores.add(sc);
+                Log.d("DB_OUT", "debugRows: " + sc.toString());
+                scores.add(sc);
+                res.moveToNext();
+            }
         }
 
 

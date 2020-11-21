@@ -15,15 +15,21 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import guilherme.battlleship.GameLogic.utils;
+import guilherme.battlleship.other.database_connection;
+
 public class MainActivity extends AppCompatActivity {
 
     private String playerName;
+    private database_connection db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        db = new database_connection(this);
         SharedPreferences oSP = getSharedPreferences("settings", Context.MODE_PRIVATE);
         this.playerName = oSP.getString("playername", "NULL");
         if (playerName.equals("NULL") || playerName.equals("") || playerName.equals(" ")) {
@@ -54,6 +60,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void leaderboard(View view) {
 
+        if(db.numberOfRows() < 1){
+            utils.sendToast("No Scores yet, play once.", this);
+            return;
+        }
         Intent leaderboard = new Intent(this, leaderboard.class);
         startActivity(leaderboard);
     }
