@@ -22,6 +22,7 @@ public class database_connection extends SQLiteOpenHelper {
     public static final String COLUMN4 = "points";
     public static final String COLUMN5 = "plays";
     public static final String COLUMN6 = "left_ships";
+    public static final String COLUMN7 = "time";
 
 
     private static final String CREATE_TABLE =
@@ -32,10 +33,17 @@ public class database_connection extends SQLiteOpenHelper {
                     COLUMN3 + " VARCHAR(7), " +
                     COLUMN4 + " INTEGER, " +
                     COLUMN5 + " INTEGER, " +
-                    COLUMN6 + " INTEGER " +
+                    COLUMN6 + " INTEGER, " +
+                    COLUMN7 + " INTEGER " +
                     " );";
 
     private static final String DROP_TABLE = "DROP TABLE " + TABLE_NAME + " ;";
+
+
+    private static final String get_top_ten =
+            "SELECT  " + COLUMN1 + ", " + COLUMN2 + ", " + COLUMN3 + ", " + COLUMN4 + ", " + COLUMN5 + ", " + COLUMN6 + ", " + COLUMN7 + " " +
+                    " FROM " + TABLE_NAME + " WHERE " +
+                    COLUMN3 + "=\"%s\" " + " ORDER BY " + COLUMN4 + " DESC LIMIT 10;";
 
 
     public database_connection(Context context) {
@@ -53,7 +61,7 @@ public class database_connection extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void insertScore(String player, int points, int plays, int left_ships, String difficulty) {
+    public void insertScore(String player, int points, int plays, int left_ships, String difficulty, long time) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN2, player);
@@ -61,6 +69,7 @@ public class database_connection extends SQLiteOpenHelper {
         contentValues.put(COLUMN4, points);
         contentValues.put(COLUMN5, plays);
         contentValues.put(COLUMN6, left_ships);
+        contentValues.put(COLUMN7, time);
         db.insert(TABLE_NAME, null, contentValues);
 
     }
@@ -82,5 +91,24 @@ public class database_connection extends SQLiteOpenHelper {
             Log.d("DB_OUT", "debugRows: " + score.fromCursor(res).toString());
             res.moveToNext();
         }
+    }
+
+    public ArrayList<score> getTopTen(String difficulty) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery(String.format(get_top_ten, difficulty), null);
+        ArrayList<score> scores = new ArrayList<>();
+        res.moveToFirst();
+
+        while (res.moveToNext()) {
+
+            score sc = score.fromCursor(res);
+
+            Log.d("DB_OUT", "debugRows: " + sc.toString());
+            scores.add(sc);
+        }
+
+
+        return scores;
+
     }
 }

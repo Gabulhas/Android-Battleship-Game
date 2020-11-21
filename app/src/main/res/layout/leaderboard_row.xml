@@ -16,38 +16,42 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/PLAYS"
+                android:id="@+id/STATS"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="TextView"
 
-                android:textSize="32sp"
+                android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/SHIPS_LEFT"
+                android:id="@+id/PLAYER"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
                 android:gravity="center"
                 android:text="TextView"
-                android:textSize="32sp"
+                android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/PLAYS"
-                app:layout_constraintStart_toEndOf="@+id/HIT_RATIO" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/HIT_RATIO"
+                android:id="@+id/TIME"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+
                 android:gravity="center"
                 android:text="TextView"
-                android:textSize="32sp"
+                android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

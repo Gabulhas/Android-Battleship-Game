@@ -33,6 +33,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        this.finishAffinity();
+    }
 
     public void startGamePhone(View view) {
         Intent startGame = new Intent(this, PlayerVSPhone_difficulty.class);

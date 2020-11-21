@@ -2,6 +2,7 @@ package guilherme.battlleship;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatImageButton;
 
 import android.app.Activity;
 import android.content.Context;
@@ -34,6 +35,7 @@ public class EndGame extends AppCompatActivity {
         int points = getIntent().getIntExtra("points", -1);
         int plays = getIntent().getIntExtra("plays", -1);
         int left_ships = getIntent().getIntExtra("left_ships", -1);
+        long time = getIntent().getLongExtra("time", -1);
 
         TextView winnerView = (TextView) findViewById(R.id.winner_text);
         TextView pointsView = (TextView) findViewById(R.id.points_text);
@@ -46,16 +48,45 @@ public class EndGame extends AppCompatActivity {
 
                 SharedPreferences oSP = getSharedPreferences("settings", Context.MODE_PRIVATE);
                 String playerName = oSP.getString("playername", "NULL");
+                AppCompatImageButton shareButton = (AppCompatImageButton) findViewById(R.id.share_button);
+                shareButton.setVisibility(View.VISIBLE);
 
-                saveToDB(playerName, points, plays, left_ships, difficulty);
+                statsView.setText(String.format("%s: %s\n%s: %d\n%s: %d\n%s: %d%s\n%s: %d", getString(R.string.stats_difficulty), difficulty, getString(R.string.stats_plays_string), plays, getString(R.string.stas_ships_left_string), left_ships, getString(R.string.stats_hit_rate), ((17 * 100) / plays), "%", getString(R.string.stats_time), time));
+                saveToDB(playerName, points, plays, left_ships, difficulty, time);
             }
         } else {
             pointsView.setText(" ");
+            statsView.setText(String.format("%s: %d\n%s: %d\n%s: %d%s", getString(R.string.stats_plays_string), plays, getString(R.string.stas_ships_left_string), left_ships, getString(R.string.stats_hit_rate), ((17 * 100) / plays), "%"));
         }
-        statsView.setText(String.format("%s: %d\n%s: %d\n%s: %d%s", getString(R.string.stats_plays_string), plays, getString(R.string.stas_ships_left_string), left_ships, getString(R.string.stats_hit_rate), ((17 * 100) / plays), "%"));
 
 
     }
+
+    public void share(View view) {
+
+        String difficulty = getIntent().getStringExtra("difficulty");
+        int points = getIntent().getIntExtra("points", -1);
+        int plays = getIntent().getIntExtra("plays", -1);
+        int left_ships = getIntent().getIntExtra("left_ships", -1);
+        long time = getIntent().getLongExtra("time", -1);
+        SharedPreferences oSP = getSharedPreferences("settings", Context.MODE_PRIVATE);
+        String playerName = oSP.getString("playername", "NULL");
+
+
+        String sending_string = String.format("I won the Battleship Game!\n\nMY STATS\n%s: %d\n%s: %s\n%s: %d\n%s: %d\n%s: %d%s\n%s: %d", getString(R.string.points_string), points, getString(R.string.stats_difficulty), difficulty, getString(R.string.stats_plays_string), plays, getString(R.string.stas_ships_left_string), left_ships, getString(R.string.stats_hit_rate), ((17 * 100) / plays), "%", getString(R.string.stats_time), time);
+
+        Log.d("SHARING", "share: " + sending_string);
+
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, sending_string);
+        sendIntent.setType("text/plain");
+
+        Intent shareIntent = Intent.createChooser(sendIntent, null);
+        startActivity(shareIntent);
+
+    }
+
 
     @Override
     public void onBackPressed() {
@@ -64,14 +95,16 @@ public class EndGame extends AppCompatActivity {
     }
 
     public void goToMainActivity(@Nullable View view) {
+
+
         Intent intent = new Intent(this.getApplicationContext(), MainActivity.class);
 
         startActivity(intent);
     }
 
-    private void saveToDB(String player, int points, int plays, int left_ships, String difficulty) {
-        Log.d("STDB", "saveToDB: " + " " + player + " " + points + " " + plays + " " + left_ships);
-        db.insertScore(player, points, plays, left_ships, difficulty);
+    private void saveToDB(String player, int points, int plays, int left_ships, String difficulty, long time) {
+        Log.d("STDB", "saveToDB: " + " " + player + " " + points + " " + plays + " " + left_ships + " " + time);
+        db.insertScore(player, points, plays, left_ships, difficulty, time);
     }
 
 }

@@ -1,6 +1,7 @@
 package guilherme.battlleship.ui.main;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
@@ -29,7 +30,8 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         // getItem is called to instantiate the fragment for the given page.
         // Return a PlaceholderFragment (defined as a static inner class below).
-        String difficulty = "easy";
+        String difficulty ="";
+        Log.d("POST", "POSITION " + position);
         switch (position) {
             case 0:
                 difficulty = "easy";
@@ -45,7 +47,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         }
 
 
-        return leaderboard_placeholder.newInstance(difficulty);
+        return PlaceholderFragment.newInstance(position, difficulty);
     }
 
     @Nullable
@@ -56,6 +58,6 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 3;
+        return TAB_TITLES.length;
     }
 }

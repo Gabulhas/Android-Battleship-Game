@@ -33,6 +33,7 @@ public class GameActivity extends AppCompatActivity {
     private boolean canPlayerClick = true;
     private String playerName;
     private int plays = 0;
+    private Long startTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,11 +49,15 @@ public class GameActivity extends AppCompatActivity {
 
         //Player vs Computer Game
         if (!difficulty.equals("multiplayer")) {
+
+            this.startTime = System.currentTimeMillis()/1000;
+
             setTitle("Player VS Computer - " + difficulty.toUpperCase());
             this.computerPlayer = new ComputerPlayer(difficulty);
             this.playerVsComputer = true;
             SharedPreferences oSP = getPreferences(MODE_PRIVATE);
             String playerName = oSP.getString("playername", "NULL");
+
 
             playerBoard = new PlayerBoard(playerName);
             enemyBoard = new PlayerBoard("Enemy");
@@ -153,7 +158,7 @@ public class GameActivity extends AppCompatActivity {
     }
 
 
-    private void endGame(String winnerText, String player, int points, int plays, int left_ships, String difficulty) {
+    private void endGame(String winnerText, String player, int points, int plays, int left_ships, String difficulty, long time) {
         Intent intent = new Intent(this, EndGame.class);
         intent.putExtra("winnerText", winnerText);
         intent.putExtra("points", points);
@@ -161,6 +166,7 @@ public class GameActivity extends AppCompatActivity {
         intent.putExtra("player", player);
         intent.putExtra("left_ships", left_ships);
         intent.putExtra("difficulty", difficulty);
+        intent.putExtra("time", time);
         startActivity(intent);
     }
 
@@ -171,17 +177,19 @@ public class GameActivity extends AppCompatActivity {
         intent.putExtra("plays", plays);
         intent.putExtra("player", player);
         intent.putExtra("left_ships", left_ships);
-        intent.putExtra("difficulty", "NULL");
         startActivity(intent);
     }
 
 
-    private int calculate_points() {
+    private int calculate_points(long time) {
 
         float minimum_plays = 17;
         float maximum_points = 100;
+        float time_float = (float) time;
+        float time_multiplier = (1/time_float) * 10;
 
-        return (int) (minimum_plays * maximum_points) / this.plays;
+
+        return (int) (((minimum_plays * maximum_points) / this.plays) / time_multiplier);
 
     }
 
@@ -195,8 +203,8 @@ public class GameActivity extends AppCompatActivity {
                 //PLAYER WON
                 //EXIT HERE
                 utils.sendToast("YOU WON", getApplicationContext());
-
-                endGame("YOU WON", this.playerName, calculate_points(), this.plays, playerBoard.getPlayerShips().size(), computerPlayer.getDifficulty());
+                long time = (System.currentTimeMillis() / 1000) - startTime;
+                endGame("YOU WON", this.playerName, calculate_points(time), this.plays, playerBoard.getPlayerShips().size(), computerPlayer.getDifficulty(), time);
                 return;
             }
             utils.sendToast("Destroyed a ship. " + enemyBoard.getPlayerShips().size() + " left.", getApplicationContext());

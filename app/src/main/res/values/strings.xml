@@ -15,15 +15,16 @@
     <string name="exit">Exit</string>
     <string name="points_string">Points</string>
     <string name="stats_plays_string">Plays</string>
+    <string name="stats_difficulty">Difficulty</string>
     <string name="stas_ships_left_string">Ships Left</string>
     <string name="stats_hit_rate">Hit Rate</string>
+    <string name="stats_time">Time</string>
     <string name="title_activity_leaderboard">leaderboard</string>
     <string name="tab_text_1">Easy</string>
     <string name="tab_text_2">Medium</string>
     <string name="tab_text_3">Hard</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="easy_button">EASY</string>
     <string name="medium_button">MEDIUM</string>
     <string name="hard_button">HARD</string>
+    <string name="share">Share</string>
 </resources>
