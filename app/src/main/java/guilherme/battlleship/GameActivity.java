@@ -213,7 +213,7 @@ public class GameActivity extends AppCompatActivity {
         if (computerPlayer.play(playerBoard)) {
             if (playerBoard.getPlayerShips().size() == 0) {
                 utils.sendToast("YOU LOST", getApplicationContext());
-                endGame("YOU LOST", this.playerName, -1, this.plays, enemyBoard.getPlayerShips().size());
+                endGame("YOU LOST", this.playerName, -1, this.plays, enemyBoard.getPlayerShips().size(), computerPlayer.getDifficulty(), 0);
                 return;
             }
             utils.sendToast("One of your ships was destroyed", getApplicationContext());

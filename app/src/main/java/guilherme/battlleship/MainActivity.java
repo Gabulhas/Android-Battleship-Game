@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        setTitle(" ");
 
         db = new database_connection(this);
         SharedPreferences oSP = getSharedPreferences("settings", Context.MODE_PRIVATE);

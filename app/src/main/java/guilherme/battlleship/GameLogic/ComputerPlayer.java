@@ -219,6 +219,7 @@ public class ComputerPlayer {
                         this.foundBoatParts.clear();
                         this.foundBoatParts.push(first);
                     }
+
                     break;
                 }
             }

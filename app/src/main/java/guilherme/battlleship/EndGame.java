@@ -55,8 +55,13 @@ public class EndGame extends AppCompatActivity {
                 saveToDB(playerName, points, plays, left_ships, difficulty, time);
             }
         } else {
-            pointsView.setText(" ");
-            statsView.setText(String.format("%s: %d\n%s: %d\n%s: %d%s", getString(R.string.stats_plays_string), plays, getString(R.string.stas_ships_left_string), left_ships, getString(R.string.stats_hit_rate), ((17 * 100) / plays), "%"));
+            if (!difficulty.equals("NULL")) {
+                pointsView.setText(" ");
+                statsView.setText(String.format("%s: %d\n%s: %d\n%s: %d%s", getString(R.string.stats_plays_string), plays, getString(R.string.stas_ships_left_string), left_ships, getString(R.string.stats_hit_rate), ((17 * 100) / plays), "%"));
+            } else {
+                pointsView.setText("Better Luck next time.");
+                statsView.setText(" :( ");
+            }
         }
 
 
