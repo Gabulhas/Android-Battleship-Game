@@ -28,10 +28,10 @@ public class GameActivity extends AppCompatActivity {
     private GridLayout play_board; //Board that allows the Player to attack
     private GridLayout my_board; //Board that displays Playing Player's board
     private ComputerPlayer computerPlayer;
+    private String playerName;
     private boolean playerOneTurn = true;
     private boolean playerVsComputer;
     private boolean canPlayerClick = true;
-    private String playerName;
     private int plays = 0;
     private Long startTime;
 
@@ -50,7 +50,7 @@ public class GameActivity extends AppCompatActivity {
         //Player vs Computer Game
         if (!difficulty.equals("multiplayer")) {
 
-            this.startTime = System.currentTimeMillis()/1000;
+            this.startTime = System.currentTimeMillis() / 1000;
 
             setTitle("Player VS Computer - " + difficulty.toUpperCase());
             this.computerPlayer = new ComputerPlayer(difficulty);
@@ -80,6 +80,7 @@ public class GameActivity extends AppCompatActivity {
 
     }
 
+    //this draws the game board in the screen from a set of spots
     public void renderBoard(GridLayout board, Boolean active, ArrayList<ArrayList<Spot>> gameBoard) {
 
         for (int i = 0; i < gameBoard.size(); i++) {
@@ -107,6 +108,7 @@ public class GameActivity extends AppCompatActivity {
                         spot.setBackground(boardSpot.getShape());
                     }
 
+                    // This handle the attack
                     spot.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -138,6 +140,8 @@ public class GameActivity extends AppCompatActivity {
 
     }
 
+
+    //this makes so you have to double click the back button to quit the game
     @Override
     public void onBackPressed() {
         if (doubleBackToExitPressedOnce) {
@@ -181,24 +185,72 @@ public class GameActivity extends AppCompatActivity {
     }
 
 
+    /*
+    Points are calculated this way:
+    Since this game there's no direct fight with the opponent, I had to come up with a point system
+    that only depends on the Human player plays,
+
+    This is:
+    The hit rate (rate of attacks that hit a ship part, in total there are 17)
+                                 X
+    The inverse of time in seconds that took to finish the game, so, the faster a player finish the game
+    the more points it gets
+
+
+    This is
+
+    /--------------------/
+    minimum_plays is the minimum plays required to finish the game, giving you 100 points if you get lucky ;)
+    maximum_points is obvious, you get this points if the amount of plays that took you to win was 17
+
+    We get (minimum_plays * maximum_points) / this.plays = Points for plays
+
+    /-------------------/
+
+    Time multiplier is calculated like:
+
+    (1/time to finish)
+
+    the    * 10  only exists to make the points look pretier :)
+
+    /-------------------/
+
+    final formula =  ((minimum_plays * maximum_points) / this.plays) * ((1/time to finish) * 10)
+
+
+     */
     private int calculate_points(long time) {
+
+        //just in case.
+        if (time == 0) {
+            time = 1;
+        }
+
 
         float minimum_plays = 17;
         float maximum_points = 100;
         float time_float = (float) time;
-        float time_multiplier = (1/time_float) * 10;
+        float time_multiplier = (1 / time_float) * 10;
 
 
-        return (int) (((minimum_plays * maximum_points) / this.plays) / time_multiplier);
+        return (int) (((minimum_plays * maximum_points) / this.plays) * time_multiplier) * 10;
 
     }
 
     //PLAYER VS COMPUTER
+    /*
+    The player plays and right after the Computer player
+     */
     private void playVsComputer(int x, int y) {
 
         this.plays += 1;
 
         if (enemyBoard.attackSpot(x, y)) {
+
+
+            /*
+            If the enemy has no boats left we win
+             */
             if (enemyBoard.getPlayerShips().size() == 0) {
                 //PLAYER WON
                 //EXIT HERE
@@ -210,6 +262,9 @@ public class GameActivity extends AppCompatActivity {
             utils.sendToast("Destroyed a ship. " + enemyBoard.getPlayerShips().size() + " left.", getApplicationContext());
         }
 
+            /*
+            If the we have no boats left we lose
+             */
         if (computerPlayer.play(playerBoard)) {
             if (playerBoard.getPlayerShips().size() == 0) {
                 utils.sendToast("YOU LOST", getApplicationContext());
@@ -223,6 +278,17 @@ public class GameActivity extends AppCompatActivity {
 
 
     //PLAYER VS PLAYER
+
+    /*
+
+    This part does the following:
+
+    Temporarly hide the board
+    Shows the "Swap players" text
+    Cleans the boards
+    Swaps the boards
+     */
+
 
     private void swapBoards() {
         this.play_board.setVisibility(View.INVISIBLE);
@@ -254,6 +320,10 @@ public class GameActivity extends AppCompatActivity {
     }
 
 
+    /*
+    This one Hides the Swap text and shows the new boards
+     */
+
     private void showBoards() {
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -269,6 +339,10 @@ public class GameActivity extends AppCompatActivity {
         }, 3000);
     }
 
+
+    /*
+    this handles players vs players
+     */
     private void playVsPlayer(int x, int y) {
 
         if (playerOneTurn) {
@@ -312,6 +386,10 @@ public class GameActivity extends AppCompatActivity {
 
     }
 
+
+    /*
+    this handles if it's a PVP scenario or a PVC scenario
+     */
 
     private void playerPlay(int x, int y) {
         if (this.playerVsComputer) {

@@ -88,12 +88,21 @@ public class ComputerPlayer {
 
     }
 
+    /*
+    This one just plays random
+     */
     private boolean playEasy(PlayerBoard enemyBoard) {
         Spot spot = randomSpot(enemyBoard);
         Log.d("EASY_ATTACK", "randomSpot: " + spot.toString());
         return enemyBoard.attackSpot(spot.getPoint().x, spot.getPoint().y);
 
     }
+
+    /*
+    This one plays random but when finds some ship it will follow it, but won't try to destroy it
+    Basically, if it finds a ship part it will go to then next part that he found
+
+     */
 
     private boolean playMedium(PlayerBoard enemyBoard) {
         boolean destroyedShip = false;
@@ -110,11 +119,16 @@ public class ComputerPlayer {
             boolean itCouldAttack = false;
 
             for (int i = 0; i < possiblePoints.length; i++) {
+
+                /*
+                This for loops just iterates over all adjacent spots around the part
+                 */
                 Point nextPoint = new Point(foundBoat.x + possiblePoints[i][0], foundBoat.y + possiblePoints[i][1]);
                 if (enemyBoard.isInBoard(nextPoint) && enemyBoard.getSpotOnPoint(nextPoint).isLive()) {
                     destroyedShip = enemyBoard.attackSpot(nextPoint.x, nextPoint.y);
                     itCouldAttack = true;
                     //if it attacked the ship
+                    //the new part that it found is now the pivot
                     if (enemyBoard.getSpotOnPoint(nextPoint.x, nextPoint.y).isContainsShip()) {
                         this.foundBoat = nextPoint;
                     }
@@ -169,6 +183,9 @@ public class ComputerPlayer {
 
     }
 
+    /*
+    helper function for checker board
+     */
     private Spot randomSpotCheckerBoard(PlayerBoard enemyBoard) {
         Spot spot = enemyBoard.getSpotOnPoint(generateRandomPointCheckerBoard());
         while (!spot.isLive()) {
@@ -183,6 +200,8 @@ public class ComputerPlayer {
         boolean destroyedShip = false;
         Log.d("PPS", "playHard: Possible points" + utils.debugPoints(this.possiblePoints));
 
+
+        // We try to hunt a part first, until we find one
         if (this.foundBoatParts.isEmpty()) {
             Spot spot = randomSpotCheckerBoard(enemyBoard);
             destroyedShip = enemyBoard.attackSpot(spot.getPoint().x, spot.getPoint().y);
@@ -191,16 +210,34 @@ public class ComputerPlayer {
             }
             Log.d("NEW_POINT", "playMedium: " + foundBoat);
         } else {
+            /*
+            if we find a piece.....
+             */
 
+
+            //If we could attack the piece,  (Obvious)
             boolean itCouldAttack = false;
             //gets the first on the stack, AKA latest part found
             foundBoat = this.foundBoatParts.peek();
 
             for (int i = 0; i < possiblePoints.length; i++) {
+                /*
+                same as medium
+                 */
                 Point nextPoint = new Point(foundBoat.x + possiblePoints[i][0], foundBoat.y + possiblePoints[i][1]);
+
+                /*
+                we will check if we can attack the next point
+                 */
                 if (enemyBoard.isInBoard(nextPoint) && enemyBoard.getSpotOnPoint(nextPoint).isLive()) {
+
+                    /*
+                    If we do...
+                     */
                     destroyedShip = enemyBoard.attackSpot(nextPoint.x, nextPoint.y);
                     itCouldAttack = true;
+
+                   // Board#.attackSpot() returns true if we destroyed a ship
                     if (destroyedShip) {
                         Point first = this.foundBoatParts.firstElement();
                         this.foundBoatParts.clear();
@@ -212,9 +249,30 @@ public class ComputerPlayer {
                     if (enemyBoard.getSpotOnPoint(nextPoint.x, nextPoint.y).isContainsShip()) {
                         this.foundBoatParts.push(nextPoint);
                         // prioritize "good direction", since boats are straight
+
+                        /*
+                        For example, we are in a point, and we attack the point Right of it, we can assume that a ship
+                        is in that same direction, because all ships are straight.
+                         */
+
+
                         this.possiblePoints = utils.moveToStart(this.possiblePoints, i);
                         break;
                     } else {
+                        /*
+                        If we didnt find a new spot and we didn't destroy the ship we can assume that,
+                        either we started on the wrong direction or that we already attacked the ship parts to one direction but we didn't finish the other direction
+
+
+                        like, let's assume that the this is a ship
+                             and we start here
+                               V
+                           #######
+
+                           and we go left, the two parts on the right of where we first found the ship
+                           are still live
+                         */
+
                         Point first = this.foundBoatParts.firstElement();
                         this.foundBoatParts.clear();
                         this.foundBoatParts.push(first);

@@ -7,6 +7,11 @@ import android.graphics.drawable.ShapeDrawable;
 import android.widget.TextView;
 
 
+/*
+This contains all the information of a spot, like, if it contains a ship, the color/shape, the current color
+if it was attacked
+ */
+
 public class Spot {
     private static final int neutralColor = Color.parseColor("#90CAF9");
 

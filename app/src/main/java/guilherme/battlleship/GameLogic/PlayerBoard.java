@@ -9,6 +9,12 @@ import java.util.ArrayList;
  * Board of a player
  */
 public class PlayerBoard {
+    /*
+    player is the player name
+    plays is the number of times that the player with this board played
+    playerShips contains information of which ships are alive
+    myBoard is the board that we have our ships where the other playern will attack
+     */
     private String player;
     private int plays = 0;
     private ArrayList<Ship> playerShips = new ArrayList<>();
@@ -83,6 +89,11 @@ public class PlayerBoard {
         this.playerShips.add(ship);
     }
 
+    /* We check if all the positions of a ship are:
+        - Inside the board
+        - there's no other ship where we want to place the parts
+
+     */
     private Boolean checkPlacement(Point point, int size, direction.directions direction) {
         Log.d("testing", "placeShip: " + point + " " + size + " " + direction);
         switch (direction) {
@@ -139,21 +150,6 @@ public class PlayerBoard {
         return playerShips;
     }
 
-    public void setPlayerShips(ArrayList<Ship> playerShips) {
-        this.playerShips = playerShips;
-    }
-
-    public String getPlayer() {
-        return player;
-    }
-
-    public void setPlayer(String player) {
-        this.player = player;
-    }
-
-    public Boolean isInBoard(int x, int y) {
-        return (x <= 9) && (x >= 0) && (y <= 9) && (y >= 0);
-    }
 
     public Boolean isInBoard(Point point) {
         int x = point.x;
@@ -191,6 +187,10 @@ public class PlayerBoard {
         }
     }
 
+    /*
+    We can think of this function like if someone else was playing with us and the other player placed
+    an attack and we had to place our markers in our bottom board
+     */
     public boolean attackSpot(int x, int y) {
         Spot attackedSpot = this.myBoard.get(x).get(y);
         Log.d("ATTACK", "attackSpot: Attacking " + this.player + " on " + attackedSpot);
