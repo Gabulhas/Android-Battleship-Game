@@ -233,7 +233,7 @@ public class GameActivity extends AppCompatActivity {
         float time_multiplier = (1 / time_float) * 10;
 
 
-        return (int) (((minimum_plays * maximum_points) / this.plays) * time_multiplier) * 10;
+        return (int) (((minimum_plays * maximum_points) / this.plays) * time_multiplier) * 100;
 
     }
 
